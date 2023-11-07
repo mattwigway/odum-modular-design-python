@@ -1,0 +1,13 @@
+project:
+  title: "PLAN 720"
+  render:
+    - slides/index.qmd
+  output-dir: docs
+format: 
+    revealjs: 
+        html-math-method: katex
+
+
+
+
+
