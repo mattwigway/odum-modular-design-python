@@ -1,0 +1,11 @@
+name: air-analysis
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pandas=2
+  - ipython
+  - ipykernel
+  - nbformat
+  - jupyter
