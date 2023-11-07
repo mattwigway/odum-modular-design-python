@@ -1,0 +1,978 @@
+---
+title: "Modular design and software development best practices in R"
+institute: "Odum Institute<br/>University of North Carolina at Chapel Hill"
+format:
+    revealjs:
+        theme: [default, unc.scss]
+        width: 1920
+        height: 1080
+        logo: UNC_logo_RGB.png
+        slide-number: true
+        footer: "https://projects.indicatrix.org/odum-modular-design-python"
+execute:
+    include: true
+    eval: true
+    echo: true
+    output: true
+jupyter: "air-analysis"
+---
+
+```{python}
+#| include: false
+#| echo: false
+#| output: false
+
+import pandas as pd
+import numpy as np
+
+data = pd.read_csv("../data/air_sample.csv")
+
+market_ids = pd.read_csv("../data/L_CITY_MARKET_ID.csv")
+
+data = data.merge(
+    market_ids.rename(columns={"Description": "OriginCity"}).set_index("Code"),
+    left_on="OriginCityMarketID",
+    right_index=True
+)
+
+data = data.merge(
+    market_ids.rename(columns={"Description": "DestCity"}).set_index("Code"),
+    left_on="DestCityMarketID",
+    right_index=True
+)
+
+carriers = pd.read_csv("../data/L_CARRIERS.csv")
+
+data = data.merge(
+    carriers.rename(columns={"Description": "OperatingCarrierName"}).set_index("Code"),
+    left_on="OpCarrier",
+    right_index=True
+)
+
+data = data.merge(
+    carriers.rename(columns={"Description": "TicketingCarrierName"}).set_index("Code"),
+    left_on="TkCarrier",
+    right_index=True
+)
+```
+
+## About me
+
+- Assistant Professor of City and Regional Planning
+    - Research focus: transportation modeling and simulation
+- Quantitative Methods Consultant at Odum
+- Three years as a software developer before graduate school
+
+## Why this matters
+
+- Code is increasingly common in research
+- Most academics receive little to no formal training in software development
+- This can lead to
+    - Inefficient development (takes too much time)
+    - Errors in code
+    - Non-reproducible analyses
+
+## What we'll be doing today
+
+- Hands-on exercise converting a set of R scripts a modular and tested format
+- Two scripts that analyze data on airline tickets from the Bureau of Transportation Statistics
+- Script download: [https://github.com/mattwigway/odum-modular-design-python](https://github.com/mattwigway/odum-modular-design-python)
+- These slides: [https://projects.indicatrix.org/odum-modular-design-python](https://projects.indicatrix.org/odum-modular-design-python)
+
+## The two notebooks
+
+- Both load and clean the air ticket data
+- One analyzes the busiest air routes in the country
+- One looks at airline "fortress hubs"---which airports have the most concentrated service from a single airline
+
+## What we'll address
+
+- Duplicated code
+- Literal numeric values
+- Automated tests
+- Package version incompatibilities
+
+## What we won't address
+
+- Version control
+    - Odum offers separate Git and Github class
+
+## `Air analysis.ipynb`
+
+- Hands-on walkthrough of file
+
+## `Airline analysis.ipynb`
+
+- Hands-on walkthrough of file
+
+## Duplicated code (don't repeat yourself)
+
+- Common software development rule: don't repeat yourself (DRY)
+- In `Air analysis.ipynb` we do the same analysis twice, once by airport and once by city
+- We can eliminate this duplicated code using a _function_
+
+## Functions
+
+- A function is a reusable piece of code that can be executed many times
+- Functions separate the _definition_ of code from the _execution_
+- You use functions all the time
+    - For instance, `sum()` is a function
+
+## Anatomy of a function
+
+- Functions are Python code that is given a name to be referred to later
+- Functions have three main components
+    - Body
+        - The main Python code of the function
+    - Arguments
+        - Values that can be specified each time the function is used
+    - Return value
+        - The result of the function
+
+## Anatomy of a function
+
+```{python}
+import math
+
+def calculate_cylinder_volume (radius, height):
+    base_area = math.pi * radius ** 2
+    volume = base_area * height
+    return volume
+```
+
+::: {.incremental}
+- _radius_ and _height_ are arguments
+- Next three lines are body (the actual calculations)
+- _volume_ is the return value
+    - `return` ends the function, any code after `return` will not be run
+- Python uses _indentation_ to define _blocks_—the body of the function is an _indented block_
+    - Similarly, the body of an `if`, `for`, `with`, `while` statement is an indented block
+:::
+
+## Using functions
+
+- Code above _defines_ the function
+- It doesn't run any of the function code
+- Function code is run when the function is _called_
+
+. . . 
+
+```{python}
+calculate_cylinder_volume(1, 2)
+```
+
+## Defining functions in `Air analysis.ipynb`
+
+- The analysis is repeated twice, once by airport pairs and once by city pairs
+- We will re-write this analysis into a function, and use the same code twice
+
+## Defining functions in `Air analysis.ipynb`
+
+```{python}
+#| eval: false
+#| output: false
+data["airport1"] = np.where(data.Origin < data.Dest, data.Origin, data.Dest)
+data["airport2"] = np.where(data.Origin < data.Dest, data.Dest, data.Origin)
+
+pairs = (
+    data
+        .groupby(["airport1", "airport2"], as_index=False)
+        .agg({"Passengers": "sum", "Distance": "first"})
+        .sort_values("Passengers", ascending=False)
+)
+```
+
+## Step one: make it a function
+
+- Move the relevant code to a single cell
+- Indent it
+- Prefix it with `def busiest_routes ():`
+- Add `return pairs` at the end
+
+```{python}
+#| output: false
+def busiest_routes ():
+    data["airport1"] = np.where(data.Origin < data.Dest, data.Origin, data.Dest)
+    data["airport2"] = np.where(data.Origin < data.Dest, data.Dest, data.Origin)
+
+    pairs = (
+        data
+            .groupby(["airport1", "airport2"], as_index=False)
+            .agg({"Passengers": "sum", "Distance": "first"})
+            .sort_values("Passengers", ascending=False)
+    )
+
+    pairs["distance_km"] = pairs.Distance * 1.609
+
+    return pairs
+```
+
+## Running our function
+
+- Running the code on the previous slide defines the function, but does not run it
+- We have to _call_ the function to run it
+
+```{python}
+busiest_routes()
+```
+
+## Adding arguments
+
+- We want to make the `Origin` and `Dest` column names arguments to the function
+- It's also standard to make the data itself and anything else you refer to inside the function arguments
+
+## Adding arguments
+
+```{python}
+#| output: false
+def busiest_routes (dataframe, origcol, destcol):
+    dataframe["airport1"] = np.where(dataframe.origcol < dataframe.destcol, dataframe.origcol, dataframe.destcol)
+    dataframe["airport2"] = np.where(dataframe.origcol < dataframe.destcol, dataframe.destcol, dataframe.origcol)
+
+    pairs = (
+        dataframe
+            .groupby(["airport1", "airport2"], as_index=False)
+            .agg({"Passengers": "sum", "Distance": "first"})
+            .sort_values("Passengers", ascending=False)
+    )
+
+    pairs["distance_km"] = pairs.Distance * 1.609
+
+    return pairs
+```
+
+## Adding arguments
+
+```{python}
+#| error: true
+busiest_routes(data, "Origin", "Dest")
+```
+
+## What happened?
+
+- Python tried to group by the columns `origcol` and `destcol`
+- These columns don't exist
+- We need to tell Python that `origcol` and `destcol` aren't actually column names, but variables that contain column names
+- We can use subscript syntax (`["columnname"]`) to solve this problem
+- Note that with subscript syntax, the column name is in quotes - this is a _literal string_
+- Any place where we're using quotes, we can replace it with a variable name and the _content_ of that variable will be used
+
+## Adding arguments
+
+```{python}
+#| output: false
+def busiest_routes (dataframe, origcol, destcol):
+    dataframe["airport1"] = np.where(dataframe[origcol] < dataframe[destcol], dataframe[origcol], dataframe[destcol])
+    dataframe["airport2"] = np.where(dataframe[origcol] < dataframe[destcol], dataframe[destcol], dataframe[origcol])
+
+    pairs = (
+        dataframe
+            .groupby(["airport1", "airport2"], as_index=False)
+            .agg({"Passengers": "sum", "Distance": "first"})
+            .sort_values("Passengers", ascending=False)
+    )
+
+    pairs["distance_km"] = pairs.Distance * 1.609
+
+    return pairs
+```
+
+## Adding arguments
+
+```{python}
+busiest_routes(data, "Origin", "Dest")
+```
+
+## Using our function for cities
+
+```{python}
+busiest_routes(data, "OriginCity", "DestCity")
+```
+
+## Putting it all together
+
+```{python}
+#| output: false
+def busiest_routes (dataframe, origcol, destcol):
+    dataframe["airport1"] = np.where(dataframe[origcol] < dataframe[destcol], dataframe[origcol], dataframe[destcol])
+    dataframe["airport2"] = np.where(dataframe[origcol] < dataframe[destcol], dataframe[destcol], dataframe[origcol])
+
+    pairs = (
+        dataframe
+            .groupby(["airport1", "airport2"], as_index=False)
+            .agg({"Passengers": "sum", "Distance": "first"})
+            .sort_values("Passengers", ascending=False)
+    )
+
+    pairs["distance_km"] = pairs.Distance * 1.609
+
+    return pairs
+
+busiest_routes(data, "Origin", "Dest")
+```
+
+## Mutating arguments
+
+- Our `busiest_routes` function _mutates_ its argument `dataframe` - i.e. it changes it
+- We add `airport1` and `airport2` columns - and you can check, you can see these columns in your data
+- This is generally a bad practice - functions should not change their arguments unless they are _explicitly_ designed to do so
+- What if you were using a column called `airport1` already for something else?
+
+## Mutating arguments
+
+- Whatever happens inside the function should be isolated, changes to how the function works internally should not change anything about what the caller sees
+- This already works for variables - if you delete your `pairs` variable from before we had a function (`{python eval=false} del pairs`), and run your `busiest_routes` function, you will not get a new `pairs` variable
+
+## Mutating arguments
+
+- The simplest fix is to add `dataframe = dataframe.copy()` at the top of your function
+- If your data is not huge, this will work fine
+
+## Mutating arguments
+
+```{python}
+def busiest_routes (dataframe, origcol, destcol):
+    dataframe = dataframe.copy()
+    dataframe["airport1"] = np.where(dataframe[origcol] < dataframe[destcol], dataframe[origcol], dataframe[destcol])
+    dataframe["airport2"] = np.where(dataframe[origcol] < dataframe[destcol], dataframe[destcol], dataframe[origcol])
+
+    pairs = (
+        dataframe
+            .groupby(["airport1", "airport2"], as_index=False)
+            .agg({"Passengers": "sum", "Distance": "first"})
+            .sort_values("Passengers", ascending=False)
+    )
+
+    pairs["distance_km"] = pairs.Distance * 1.609
+
+    return pairs
+
+busiest_routes(data, "Origin", "Dest")
+```
+
+## Default arguments
+
+- Sometimes, you will have a function with a lot of arguments, but most of them don't need to be changed often
+    - e.g. parameter values in a model estimation
+- You specify these by just adding the default value with an `=` when defining the function
+- When the function is called, the default value will be used unless a different value was specified
+
+## Default arguments
+
+```{python}
+def busiest_routes (dataframe, origcol="Origin", destcol="Dest"):
+    dataframe = dataframe.copy()
+    dataframe["airport1"] = np.where(dataframe[origcol] < dataframe[destcol], dataframe[origcol], dataframe[destcol])
+    dataframe["airport2"] = np.where(dataframe[origcol] < dataframe[destcol], dataframe[destcol], dataframe[origcol])
+
+    pairs = (
+        dataframe
+            .groupby(["airport1", "airport2"], as_index=False)
+            .agg({"Passengers": "sum", "Distance": "first"})
+            .sort_values("Passengers", ascending=False)
+    )
+
+    pairs["distance_km"] = pairs.Distance * 1.609
+
+    return pairs
+
+busiest_routes(data)
+```
+
+## Default arguments
+
+- But you can still specify the argument values
+
+```{python}
+busiest_routes(data, "OriginCity", "DestCity")
+```
+
+## Named arguments
+
+- When calling a function, you can specify the arguments by name instead of by putting them in order
+- When there are a lot of arguments, this can be very helpful
+- You don't need to do anything special to your function to enable this
+
+```{python}
+busiest_routes(data, destcol="OriginCity", origcol="DestCity")
+```
+
+## Exercise: do the same in `Airline analysis.ipynb`
+
+- Write a function to compute market shares
+- Use that function to compute market shares by operating carrier and ticketing carrier
+- Bonus: also compute market shares for individual airports instead of cities
+
+## Result
+
+```{python}
+def market_shares(dataframe, carriercol, citycol):
+    mkt_shares = (
+        dataframe
+            .groupby([citycol, carriercol])
+            .Passengers
+            .sum()
+            .reset_index()
+    )
+    
+    mkt_shares["market_share"] = mkt_shares.Passengers / mkt_shares.groupby(citycol).Passengers.transform("sum")
+    
+    mkt_shares = mkt_shares.sort_values("market_share", ascending=False)
+    
+    return mkt_shares.loc[mkt_shares.Passengers > 1000]
+```
+
+. . .
+
+- Do we need to have a `dataframe = dataframe.copy()` line here?
+
+## Result
+
+```{r}
+market_shares(data, "OperatingCarrierName", "OriginCity")
+```
+
+## Result
+
+```{r}
+market_shares(data, "TicketingCarrierName", "OriginCity")
+```
+
+## Result
+
+```{r}
+market_shares(data, "TicketingCarrierName", "Origin")
+```
+
+
+## Symbolic constants
+
+- We still have the value `1.609` in our function to convert miles to kilometers
+- It's a bad practice to have literal values like these in your code
+    - In a large project, value will end up spread over many files
+    - Difficult to change (maybe you want to increase accuracy later by changing it to `1.609344`)
+    - Numbers used in many places can be prone to typos
+
+## Symbolic constants
+
+- We can define a _constant variable_ in our file that contains the value `1.609`, and refer to it when needed
+- By convention, constants are all uppercase, and usually appear near the start of the file
+- Python does not enforce variables being constant, you could change them in other code, but you shouldn't
+
+## Symbolic constants
+
+- Near the top of your notebook, add
+
+```{r}
+KILOMETERS_PER_MILE = 1.609
+```
+
+- Replace `1.609` in your function with `KILOMETERS_PER_MILE`
+
+## Runtime checks: `assert`
+
+- A first step towards ensuring correctness is to add checks throughout your code
+- In Python, this is most easily done with the `assert` statement - this will error if whatever condition it checks is not true
+
+## Runtime checks: `assert`
+
+- Let's make sure all of the passenger numbers are positive and non-NA
+- Add these lines to the start of your `busiest_routes` function:
+
+```{python}
+#| eval: false
+assert (dataframe.Passengers >= 1).all()
+assert not pd.isnull(dataframe.Passengers).any()
+```
+
+## Runtime checks: `assert`
+
+```{python}
+#| output: false
+def busiest_routes (dataframe, origcol, destcol):
+    # check assumptions
+
+    dataframe["airport1"] = np.where(dataframe[origcol] < dataframe[destcol], dataframe[origcol], dataframe[destcol])
+    dataframe["airport2"] = np.where(dataframe[origcol] < dataframe[destcol], dataframe[destcol], dataframe[origcol])
+
+    pairs = (
+        dataframe
+            .groupby(["airport1", "airport2"], as_index=False)
+            .agg({"Passengers": "sum", "Distance": "first"})
+            .sort_values("Passengers", ascending=False)
+    )
+
+    return pairs
+
+busiest_routes(data, "Origin", "Dest")
+busiest_routes(data, "OriginCity", "DestCity")
+```
+
+## Confirming that errors occur
+
+```{python}
+#| error: true
+error_data = data.copy()
+data.iloc[0, "Passengers"] = -1
+busiest_routes(mutate(data, Passengers=-1), Origin, Dest)
+```
+
+## Using functions in multiple files
+
+- Often we may want to use functions in multiple files
+- For instance, we use the same data loading code in both notebooks
+- The simplest way is to put the functions in another file, and use `import` to load them
+- `import` will run the code in a file and make all of the functions and variables available
+- Just as if that code was pasted into each source file
+
+## Creating a data cleaning function
+
+- Create a function that takes arguments for the file names of the dataset and the two tables that are joined to it,
+    - performs the data cleaning/processing,
+    - and returns the final dataset
+- Save this function to a new file in the same directory as the others
+- This should be a Python (`.py`) file, not a notebook
+- You will need to import any functions that you use from other libraries (e.g. `pd.read_csv`)
+
+## Using your data cleaning function
+
+- Delete the data loading code in each of the analysis files
+- Restart the kernel (Kernel -> Restart Kernel) to remove existing data from memory
+- Add `import load` at the top of the file to import your new file
+- Call your new function like this
+
+```{python}
+#| eval: false
+data = load.load_data("data/air_sample.csv", "data/L_CITY_MARKET_ID.csv", "data/L_CARRIERS.csv")
+```
+
+## The finished function
+
+Yours might not look exactly the same, and that's okay
+
+```{python}
+#| eval: false
+import pandas as pd
+
+def load_data(main_file, market_file, carrier_file):
+    data = pd.read_csv(main_file)
+    
+    market_ids = pd.read_csv(market_file)
+
+    data = data.merge(
+        market_ids.rename(columns={"Description": "OriginCity"}).set_index("Code"),
+        left_on="OriginCityMarketID",
+        right_index=True
+    )
+    
+    data = data.merge(
+        market_ids.rename(columns={"Description": "DestCity"}).set_index("Code"),
+        left_on="DestCityMarketID",
+        right_index=True
+    )
+
+    carriers = pd.read_csv(carrier_file)
+    
+    data = data.merge(
+        carriers.rename(columns={"Description": "OperatingCarrierName"}).set_index("Code"),
+        left_on="OpCarrier",
+        right_index=True
+    )
+    
+    data = data.merge(
+        carriers.rename(columns={"Description": "TicketingCarrierName"}).set_index("Code"),
+        left_on="TkCarrier",
+        right_index=True
+    )
+
+    return data
+```
+
+## All data manipulation should be in code
+
+- I _never_ modify original data files, and rarely save new ones
+- I always write code or functions to make all the changes/cleaning I need
+- I run that function to load the data each time
+- This way I can always see what has been done to data
+
+## Creating Python packages
+
+- Technically, what you did when you created `load.py` was create a package
+- Just like `pandas` or `numpy`
+- Pretty soon, though, you're not going to want to have all of your package code in one file
+
+## Differences between Python scripts/notebooks and package code
+
+- Almost everything in a package should be inside a function
+    - Code that is not in functions will be run when the package is loaded
+    - Main exception is constants
+
+## Creating multi-file Python packages
+
+- You use packages all the time when you use Python
+    - Any time you run `import ...` you're loading a package
+- You can also create packages yourself
+
+## Advantages of creating a package
+
+- Easy to share code, even between projects (no copying .py files to load with `import`)
+- Packages facilitate automated testing
+
+## Creating a multi-file package
+
+- In its simplest form, a multi-file Python package is just a folder containing a file `__init__.py`
+    - Note: double underscores before and after
+- The folder name should be the name of the package
+
+## Creating a multi-file package
+
+- When you run `import package`, the code in `__init__.py` is run
+- Any functions or variables defined there will be available
+
+## Creating a multi-file package
+
+- The whole point was to have multiple files, so what good is `__init__.py`?
+- You can add functions in other files, and then import them in `__init__.py`
+
+## Creating a multi-file package
+
+- Call your package `airlinestats`
+- Move your `load.py` file into your package folder
+- Create a new file `analysis.py` and another `constants.py`
+- Each of these files is its own package, often called a "module"
+
+## Sidebar: namespaces
+
+- Multiple packages may define functions with the same name
+- To keep this straight, each Python package/module has its own _namespace_; names defined in one file are not accessible in another file
+    - Functions also have namespaces; names used inside a function are not visible outside the function
+- Functions and values must be imported to be used in a different file
+
+## Sidebar: namespaces
+
+- The most common `import` statement is just `import package`
+    - or `import package as pkg`
+- This requires you to type `package.function` every time you want to use something from that package's namespace
+- You can also run `from package import function` to bring something directly into your package's namespace
+    - `from package import *` to import everything from a package, but this can lead to unexpected results
+- Then you can just type `function` to refer to it
+
+## Adding Python code to your `airlinestats` package
+
+- Put the functions to calculate market shares and route popularity in `analysis.py`
+- Put the symbolic constant `KILOMETERS_PER_MILE` in `constants.py`
+    - Good practice to put your constants in one file so they don't get defined in multiple places accidentally
+
+## Loading your package
+
+- You can import your package, just like you did before
+- Run `import airlinestats` in your notebook
+
+## Using your package
+
+- Try running the `load_data` function
+
+```{r}
+#| eval: false
+data = airlinestats.load_data(
+    "data/air_sample.csv",
+    "data/L_CITY_MARKET_ID.csv",
+    "data/L_CARRIERS.csv"
+)
+```
+
+. . . 
+
+<pre>AttributeError: module 'airlinestats' has no attribute 'load_data'</pre>
+
+## Making functions from other files available
+
+- Remember that Python only runs the code in `__init__.py` when you import your package
+- In `__init__.py`, we need to tell Python to make the `load_data`, `busiest_routes`, and `market_shares` functions available
+
+## Making functions from other files available
+
+```{python}
+#| eval: false
+from .load import load_data
+from .analysis import *
+```
+
+- The `.` means the `.load` package _inside the current package_
+
+## Try it again
+
+- To reload the package, you need to either
+    - Restart your kernel
+    - Run `importlib.reload(airlinestats)`
+
+## Try it again
+
+- `load_data` should work now
+- Now, try `busiest_routes` or `market_shares`
+
+## Try it again
+
+```{python}
+#| eval: false
+airlinestats.busiest_routes(data, "Origin", "Dest")
+```
+
+. . . 
+
+<pre>NameError: name 'np' is not defined</pre>
+
+## Fixing the issue
+
+- We need to explicitly import numpy into the `analysis.py` file where we use it
+- Add to the top of `analysis.py`:
+    - `import numpy as np`
+- Did that solve the problem?
+- You may need to restart the kernel
+
+. . .
+
+<pre>NameError: name 'KILOMETERS_PER_MILE' is not defined</pre>
+
+## Fixing the issue
+
+::: {.incremental}
+- We need to import the `KILOMETERS_PER_MILE` constant into the `analysis.py` file
+- `from .constants import KILOMETERS_PER_MILE`
+:::
+
+## Installing the package
+
+- To install our packages so that other projects on the system can access them, we need to make a slight change to our package
+- First, we need to create another directory with the name of the package, enclosing the current `airlinestats` directory
+- So it will look something like this:
+- `airlinestats`
+    - `airlinestats`
+        - `__init__.py`
+        - `analysis.py`
+        - `constants.py`
+        - `load.py`
+
+## Installing the package
+
+- We also need to give Python some information about the package itself before it can be installed
+- We do this by creating a `pyproject.toml` file
+- This file can contain lots of information (dependencies, build system configuration, etc.), but in this case we will just put in the package name and version
+
+```
+[project]
+name = "airlinestats"
+version = "0.0.1"
+```
+
+- Save this in the outer `airlinestats` directory
+
+## Installing the package
+
+- In a console, in the outer `airlinestats` directory, run `python -m pip install .`
+- `airlinestats` is now installed for all project (or at least, all that use the current conda environment - more on that soon)
+
+## Bringing it full circle
+
+- Return to the original notebook files
+- Rewrite them to use your library
+
+## Advanced topics in packaging
+
+- When you install a Python package with `conda` or `pip`, it downloads a lot of other packages that are needed as well—the _dependencies_
+- We'll talk about project-level dependency management when we talk about `conda` environments, but if you were publishing a package you'd want to put dependency information in `pyproject.toml`
+
+## Automated testing
+
+- Automated testing formalizes testing and makes it repeatable
+- You write code that tests your functions, and ensures they give the correct results
+- Every time you change the code, you can run all the tests you've ever written, to make sure you haven't reintroduced old issues
+
+## The structure of testing
+
+- Automated tests consist of code and _expectations_ or _assertions_
+- A test exercises one of the functions in your package, and specifies expectations about its output
+- Good tests are small, with one piece of code tested and a handful of expections
+- This may require splitting your package code up into multiple functions
+- It's a good idea to test how your package acts when used incorrectly as well—for instance, when fed bad data
+
+## Automated testing in Python
+
+- There are many testing libraries for Python
+- We'll use the built-in [unittest module](https://docs.python.org/3/library/unittest.html)
+
+## Automated testing in Python
+
+- We now have a `tests/` directory, with a `testthat` directory inside it
+- Any file starting with `test` and ending with `.R` in this directory will be run as part of automated testing
+
+## Writing tests
+
+- Create an R file to hold tests for the analysis functions
+- It's good practice to match the names of the test files to the names of the files that define the code being tested, so create `tests/testthat/test-analysis.R`
+
+## Writing tests
+
+- We'll write two tests for the analysis code
+    1. We'll test that market shares of all airline at an airport sum to 1
+    2. We'll test that passing in a dataset without a `Passengers` column leads to an error
+
+## Writing tests
+
+- Often, we need data for our tests
+- Here, we will create a small dataset within our test file directly
+- It is also possible to distribute a CSV with your package with test data
+- I like to put my code to generate test data in a function, and re-create the data for each test, so that there is no chance of one test modifying the data used by another
+    - Unless the data take so long to create or load that this is impractical
+- Create a folder `test` inside our main top-level `airlinestats` folder
+
+## Write the test for market shares
+
+- Python unit tests use test _classes_ ("objects" that have functions that can be used with them)
+- Every test class has to _inherit_ from the `unittest.TestCase` class
+- Any function within the test class that starts with `test_` is a test case
+- There are many `assertions` you can make about the results
+- `setUp()` is a function run before each test case to generate data, etc.
+- Let's create a file `test.py`
+    - You don't have to call it this, and [most large projects will have tests spread across many files](https://github.com/mattwigway/eqsormo/tree/main/tests)
+- Also create an empty `__init__.py` file in the `test` directory
+
+## Write the tests
+
+```{python}
+#| eval: false
+import unittest
+import pandas as pd
+import numpy as np
+import airlinestats
+
+class AirlineStatsTest(unittest.TestCase):
+    def setUp(self):
+        self.data = pd.DataFrame({
+            "Origin": ["SFO", "ORD", "DCA", "PHX", "BOS", "RDU"] * 20,
+            "Destination": ["DFW", "MCI", "MIA", "ABQ", "CLT"] * 24,
+            "Passengers": [200, 70, 300, 300, 500] * 24,
+            "Carrier": ["United", "American", "Delta", "Southwest", "JetBlue"] * 24
+        })
+
+    def test_market_shares(self):
+        result = airlinestats.market_shares(self.data, "Carrier", "Origin")
+        # now we group by airport to make sure the market shares are one
+        overall_share = (
+            result
+                .groupby("Origin")
+                .market_share
+                .sum()
+        )
+
+        self.assertEqual(len(overall_share), 6)
+        self.assertTrue(np.allclose(overall_share, 1))
+
+    def test_passenger_column_missing(self):
+        data = self.data.drop(columns=["Passengers"])
+        with self.assertRaises(AttributeError):
+            airlinestats.market_shares(data, "Carrier", "Origin")
+```
+
+## Run tests
+
+- In a terminal, navigate to the top-level `airlinestats` directory
+- Run `python -m unittest`
+
+```
+======================================================================
+FAIL: test_market_shares (test.test_data.AirlineStatsTest.test_market_shares)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/mwbc/git/odum-modular-design-python/airlinestats/test/test_data.py", line 29, in test_market_shares
+    self.assertTrue(np.allclose(overall_share, 1))
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.006s
+
+FAILED (failures=1)
+```
+
+## Fix test errors
+
+- We got a test failure for the market shares test
+- This is because we filtered out small airlines in the function
+- Let's remove the filtering from the function
+    - It's good to break your functions into smaller pieces for easier testing
+- Re-run the tests
+
+## Including data in tests
+
+- Sometimes, you'll need to include toy datasets to use with your tests
+- Let's write a new test for the `busiest_routes` function, to make sure it identifies the busiest routes
+- We'll make a toy dataset to work with
+
+## Including data in tests
+
+- Put data files in `test/data/`
+- Call it `passengers.csv`
+
+```
+from,to,Passengers,Distance
+SFO,JFK,2,2586
+RDU,CLT,3,130
+JFK,SFO,2,2586
+```
+
+## Writing the test
+
+- Write a test that reads the data in and tests that `busiest_routes` returns JFK->SFO as the busiest route
+- Put the test in a new file
+- You can get the path to your `passengers.csv` file with `os.path.join(os.path.dirname(__file__), "data", "passengers.csv")`
+
+## Writing the test
+
+```{python}
+#| eval: false
+import unittest
+import pandas as pd
+import os.path
+import airlinestats
+
+class TestBusiest(unittest.TestCase):
+    def setUp (self):
+        self.data = pd.read_csv(os.path.join(os.path.dirname(__file__), "data", "passengers.csv"))
+
+    def test_busiest (self):
+        routes = airlinestats.busiest_routes(self.data, "from", "to")
+        routes = routes.sort_values("Passengers", ascending=False)
+        self.assertEqual(routes.airport1.iloc[0], "JFK")
+        self.assertEqual(routes.airport2.iloc[0], "SFO")
+```
+
+## When...
+
+### to create a package
+
+- When you are building reusable functions for a large project, or several projects
+- When you want to employ automated testing
+
+### not to create a package
+
+- Simple analyses and one-off projects
+- Projects with few interdependencies and where `stopifnot` testing is sufficient
+
+## How to use your package
+
+- Two ways to use your package: through `pip install` and through importing a local package
+- `install` is the "right" way to use packages
+- Importing a local package has advantages, though
+    - Always in sync with your code - no installation step needed
+    - Much scientific code is not very useful outside the project it was designed for
+
+## Writing scripts using your package
+
+- Scripts or notebooks can be in your package directory or elsewhere
+- If you're installing your package, you can load it in your scripts with `import`
+- Otherwise, the notebooks and python files need to be in the same place so that `import` knows where to find the package
+
+## Where to put your scripts
+
+- Single-project package - keep them in the same directory as the package
+- Multiple-project package - have a separate directory/repository for each project using the package
