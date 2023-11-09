@@ -512,7 +512,7 @@
 </section>
 <section id="anatomy-of-a-function-1" class="slide level2">
 <h2>Anatomy of a function</h2>
-<div id="549f412d" class="cell" data-execution_count="2">
+<div id="6fcb291e" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> math</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="kw">def</span> calculate_cylinder_volume (radius, height):</span>
@@ -543,9 +543,9 @@
 <li>Function code is run when the function is <em>called</em></li>
 </ul>
 <div class="fragment">
-<div id="8befae53" class="cell" data-execution_count="3">
+<div id="9846b3ae" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>calculate_cylinder_volume(<span class="dv">1</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>6.283185307179586</code></pre>
 </div>
 </div>
@@ -560,7 +560,7 @@
 </section>
 <section id="defining-functions-in-air-analysis.ipynb-1" class="slide level2">
 <h2>Defining functions in <code>Air analysis.ipynb</code></h2>
-<div id="352eca5b" class="cell" data-execution_count="4">
+<div id="4ee854e6" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>data[<span class="st">"airport1"</span>] <span class="op">=</span> np.where(data.Origin <span class="op">&lt;</span> data.Dest, data.Origin, data.Dest)</span>
 <span id="cb4-2"><a href="#cb4-2"></a>data[<span class="st">"airport2"</span>] <span class="op">=</span> np.where(data.Origin <span class="op">&lt;</span> data.Dest, data.Dest, data.Origin)</span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
@@ -580,7 +580,7 @@
 <li>Prefix it with <code>def busiest_routes ():</code></li>
 <li>Add <code>return pairs</code> at the end</li>
 </ul>
-<div id="88971222" class="cell" data-execution_count="5">
+<div id="138c3a71" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> busiest_routes ():</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    data[<span class="st">"airport1"</span>] <span class="op">=</span> np.where(data.Origin <span class="op">&lt;</span> data.Dest, data.Origin, data.Dest)</span>
 <span id="cb5-3"><a href="#cb5-3"></a>    data[<span class="st">"airport2"</span>] <span class="op">=</span> np.where(data.Origin <span class="op">&lt;</span> data.Dest, data.Dest, data.Origin)</span>
@@ -603,9 +603,9 @@
 <li>Running the code on the previous slide defines the function, but does not run it</li>
 <li>We have to <em>call</em> the function to run it</li>
 </ul>
-<div id="5e587390" class="cell" data-execution_count="6">
+<div id="93ab7464" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>busiest_routes()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -738,7 +738,7 @@
 </section>
 <section id="adding-arguments-1" class="slide level2">
 <h2>Adding arguments</h2>
-<div id="fc48b635" class="cell" data-execution_count="7">
+<div id="85973d46" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> busiest_routes (dataframe, origcol, destcol):</span>
 <span id="cb7-2"><a href="#cb7-2"></a>    dataframe[<span class="st">"airport1"</span>] <span class="op">=</span> np.where(dataframe.origcol <span class="op">&lt;</span> dataframe.destcol, dataframe.origcol, dataframe.destcol)</span>
 <span id="cb7-3"><a href="#cb7-3"></a>    dataframe[<span class="st">"airport2"</span>] <span class="op">=</span> np.where(dataframe.origcol <span class="op">&lt;</span> dataframe.destcol, dataframe.destcol, dataframe.origcol)</span>
@@ -757,7 +757,7 @@
 </section>
 <section id="adding-arguments-2" class="slide level2">
 <h2>Adding arguments</h2>
-<div id="bdd5e460" class="cell" data-execution_count="8">
+<div id="c9237eaf" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>busiest_routes(data, <span class="st">"Origin"</span>, <span class="st">"Dest"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>AttributeError: 'DataFrame' object has no attribute 'origcol'</code></pre>
@@ -777,7 +777,7 @@
 </section>
 <section id="adding-arguments-3" class="slide level2">
 <h2>Adding arguments</h2>
-<div id="b76b2d3b" class="cell" data-execution_count="9">
+<div id="c42ee024" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">def</span> busiest_routes (dataframe, origcol, destcol):</span>
 <span id="cb10-2"><a href="#cb10-2"></a>    dataframe[<span class="st">"airport1"</span>] <span class="op">=</span> np.where(dataframe[origcol] <span class="op">&lt;</span> dataframe[destcol], dataframe[origcol], dataframe[destcol])</span>
 <span id="cb10-3"><a href="#cb10-3"></a>    dataframe[<span class="st">"airport2"</span>] <span class="op">=</span> np.where(dataframe[origcol] <span class="op">&lt;</span> dataframe[destcol], dataframe[destcol], dataframe[origcol])</span>
@@ -796,9 +796,9 @@
 </section>
 <section id="adding-arguments-4" class="slide level2">
 <h2>Adding arguments</h2>
-<div id="3d32ccc4" class="cell" data-execution_count="10">
+<div id="60d85f56" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>busiest_routes(data, <span class="st">"Origin"</span>, <span class="st">"Dest"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -924,9 +924,9 @@
 </section>
 <section id="using-our-function-for-cities" class="slide level2">
 <h2>Using our function for cities</h2>
-<div id="d874bb31" class="cell" data-execution_count="11">
+<div id="44a8dc90" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>busiest_routes(data, <span class="st">"OriginCity"</span>, <span class="st">"DestCity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="28">
+<div class="cell-output cell-output-display" data-execution_count="10">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1052,7 +1052,7 @@
 </section>
 <section id="putting-it-all-together" class="slide level2">
 <h2>Putting it all together</h2>
-<div id="c1399944" class="cell" data-execution_count="12">
+<div id="9e3de206" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> busiest_routes (dataframe, origcol, destcol):</span>
 <span id="cb13-2"><a href="#cb13-2"></a>    dataframe[<span class="st">"airport1"</span>] <span class="op">=</span> np.where(dataframe[origcol] <span class="op">&lt;</span> dataframe[destcol], dataframe[origcol], dataframe[destcol])</span>
 <span id="cb13-3"><a href="#cb13-3"></a>    dataframe[<span class="st">"airport2"</span>] <span class="op">=</span> np.where(dataframe[origcol] <span class="op">&lt;</span> dataframe[destcol], dataframe[destcol], dataframe[origcol])</span>
@@ -1096,7 +1096,7 @@
 </section>
 <section id="mutating-arguments-3" class="slide level2">
 <h2>Mutating arguments</h2>
-<div id="0af64785" class="cell" data-execution_count="13">
+<div id="5191a904" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">def</span> busiest_routes (dataframe, origcol, destcol):</span>
 <span id="cb14-2"><a href="#cb14-2"></a>    dataframe <span class="op">=</span> dataframe.copy()</span>
 <span id="cb14-3"><a href="#cb14-3"></a>    dataframe[<span class="st">"airport1"</span>] <span class="op">=</span> np.where(dataframe[origcol] <span class="op">&lt;</span> dataframe[destcol], dataframe[origcol], dataframe[destcol])</span>
@@ -1114,7 +1114,7 @@
 <span id="cb14-15"><a href="#cb14-15"></a>    <span class="cf">return</span> pairs</span>
 <span id="cb14-16"><a href="#cb14-16"></a></span>
 <span id="cb14-17"><a href="#cb14-17"></a>busiest_routes(data, <span class="st">"Origin"</span>, <span class="st">"Dest"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1251,7 +1251,7 @@
 </section>
 <section id="default-arguments-1" class="slide level2">
 <h2>Default arguments</h2>
-<div id="854ac9b9" class="cell" data-execution_count="14">
+<div id="fce2129e" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">def</span> busiest_routes (dataframe, origcol<span class="op">=</span><span class="st">"Origin"</span>, destcol<span class="op">=</span><span class="st">"Dest"</span>):</span>
 <span id="cb15-2"><a href="#cb15-2"></a>    dataframe <span class="op">=</span> dataframe.copy()</span>
 <span id="cb15-3"><a href="#cb15-3"></a>    dataframe[<span class="st">"airport1"</span>] <span class="op">=</span> np.where(dataframe[origcol] <span class="op">&lt;</span> dataframe[destcol], dataframe[origcol], dataframe[destcol])</span>
@@ -1269,7 +1269,7 @@
 <span id="cb15-15"><a href="#cb15-15"></a>    <span class="cf">return</span> pairs</span>
 <span id="cb15-16"><a href="#cb15-16"></a></span>
 <span id="cb15-17"><a href="#cb15-17"></a>busiest_routes(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1398,9 +1398,9 @@
 <ul>
 <li>But you can still specify the argument values</li>
 </ul>
-<div id="609b105d" class="cell" data-execution_count="15">
+<div id="ead6ef02" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>busiest_routes(data, <span class="st">"OriginCity"</span>, <span class="st">"DestCity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1531,9 +1531,9 @@
 <li>When there are a lot of arguments, this can be very helpful</li>
 <li>You don’t need to do anything special to your function to enable this</li>
 </ul>
-<div id="ca6be2eb" class="cell" data-execution_count="16">
+<div id="7a670282" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>busiest_routes(data, destcol<span class="op">=</span><span class="st">"OriginCity"</span>, origcol<span class="op">=</span><span class="st">"DestCity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -1667,7 +1667,7 @@
 </section>
 <section id="result" class="slide level2">
 <h2>Result</h2>
-<div id="ff17cf91" class="cell" data-execution_count="17">
+<div id="41de977f" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">def</span> market_shares(dataframe, carriercol, citycol):</span>
 <span id="cb18-2"><a href="#cb18-2"></a>    mkt_shares <span class="op">=</span> (</span>
 <span id="cb18-3"><a href="#cb18-3"></a>        dataframe</span>
@@ -1744,36 +1744,38 @@
 <li>Let’s make sure all of the passenger numbers are positive and non-NA</li>
 <li>Add these lines to the start of your <code>busiest_routes</code> function:</li>
 </ul>
-<div id="722f6729" class="cell" data-execution_count="18">
+<div id="302bb4a2" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a><span class="cf">assert</span> (dataframe.Passengers <span class="op">&gt;=</span> <span class="dv">1</span>).<span class="bu">all</span>()</span>
 <span id="cb23-2"><a href="#cb23-2"></a><span class="cf">assert</span> <span class="kw">not</span> pd.isnull(dataframe.Passengers).<span class="bu">any</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="runtime-checks-assert-2" class="slide level2">
 <h2>Runtime checks: <code>assert</code></h2>
-<div id="101a7962" class="cell" data-execution_count="19">
+<div id="2837abb6" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">def</span> busiest_routes (dataframe, origcol, destcol):</span>
 <span id="cb24-2"><a href="#cb24-2"></a>    <span class="co"># check assumptions</span></span>
-<span id="cb24-3"><a href="#cb24-3"></a></span>
-<span id="cb24-4"><a href="#cb24-4"></a>    dataframe[<span class="st">"airport1"</span>] <span class="op">=</span> np.where(dataframe[origcol] <span class="op">&lt;</span> dataframe[destcol], dataframe[origcol], dataframe[destcol])</span>
-<span id="cb24-5"><a href="#cb24-5"></a>    dataframe[<span class="st">"airport2"</span>] <span class="op">=</span> np.where(dataframe[origcol] <span class="op">&lt;</span> dataframe[destcol], dataframe[destcol], dataframe[origcol])</span>
-<span id="cb24-6"><a href="#cb24-6"></a></span>
-<span id="cb24-7"><a href="#cb24-7"></a>    pairs <span class="op">=</span> (</span>
-<span id="cb24-8"><a href="#cb24-8"></a>        dataframe</span>
-<span id="cb24-9"><a href="#cb24-9"></a>            .groupby([<span class="st">"airport1"</span>, <span class="st">"airport2"</span>], as_index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb24-10"><a href="#cb24-10"></a>            .agg({<span class="st">"Passengers"</span>: <span class="st">"sum"</span>, <span class="st">"Distance"</span>: <span class="st">"first"</span>})</span>
-<span id="cb24-11"><a href="#cb24-11"></a>            .sort_values(<span class="st">"Passengers"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb24-12"><a href="#cb24-12"></a>    )</span>
-<span id="cb24-13"><a href="#cb24-13"></a></span>
-<span id="cb24-14"><a href="#cb24-14"></a>    <span class="cf">return</span> pairs</span>
+<span id="cb24-3"><a href="#cb24-3"></a>    <span class="cf">assert</span> (dataframe.Passengers <span class="op">&gt;=</span> <span class="dv">1</span>).<span class="bu">all</span>()</span>
+<span id="cb24-4"><a href="#cb24-4"></a>    <span class="cf">assert</span> <span class="kw">not</span> pd.isnull(dataframe.Passengers).<span class="bu">any</span>()</span>
+<span id="cb24-5"><a href="#cb24-5"></a></span>
+<span id="cb24-6"><a href="#cb24-6"></a>    dataframe[<span class="st">"airport1"</span>] <span class="op">=</span> np.where(dataframe[origcol] <span class="op">&lt;</span> dataframe[destcol], dataframe[origcol], dataframe[destcol])</span>
+<span id="cb24-7"><a href="#cb24-7"></a>    dataframe[<span class="st">"airport2"</span>] <span class="op">=</span> np.where(dataframe[origcol] <span class="op">&lt;</span> dataframe[destcol], dataframe[destcol], dataframe[origcol])</span>
+<span id="cb24-8"><a href="#cb24-8"></a></span>
+<span id="cb24-9"><a href="#cb24-9"></a>    pairs <span class="op">=</span> (</span>
+<span id="cb24-10"><a href="#cb24-10"></a>        dataframe</span>
+<span id="cb24-11"><a href="#cb24-11"></a>            .groupby([<span class="st">"airport1"</span>, <span class="st">"airport2"</span>], as_index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb24-12"><a href="#cb24-12"></a>            .agg({<span class="st">"Passengers"</span>: <span class="st">"sum"</span>, <span class="st">"Distance"</span>: <span class="st">"first"</span>})</span>
+<span id="cb24-13"><a href="#cb24-13"></a>            .sort_values(<span class="st">"Passengers"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb24-14"><a href="#cb24-14"></a>    )</span>
 <span id="cb24-15"><a href="#cb24-15"></a></span>
-<span id="cb24-16"><a href="#cb24-16"></a>busiest_routes(data, <span class="st">"Origin"</span>, <span class="st">"Dest"</span>)</span>
-<span id="cb24-17"><a href="#cb24-17"></a>busiest_routes(data, <span class="st">"OriginCity"</span>, <span class="st">"DestCity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-16"><a href="#cb24-16"></a>    <span class="cf">return</span> pairs</span>
+<span id="cb24-17"><a href="#cb24-17"></a></span>
+<span id="cb24-18"><a href="#cb24-18"></a>busiest_routes(data, <span class="st">"Origin"</span>, <span class="st">"Dest"</span>)</span>
+<span id="cb24-19"><a href="#cb24-19"></a>busiest_routes(data, <span class="st">"OriginCity"</span>, <span class="st">"DestCity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="confirming-that-errors-occur" class="slide level2">
 <h2>Confirming that errors occur</h2>
-<div id="94f62c9b" class="cell" data-execution_count="20">
+<div id="8c95e91b" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a>error_data <span class="op">=</span> data.copy()</span>
 <span id="cb25-2"><a href="#cb25-2"></a>data.iloc[<span class="dv">0</span>, <span class="st">"Passengers"</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
 <span id="cb25-3"><a href="#cb25-3"></a>busiest_routes(mutate(data, Passengers<span class="op">=-</span><span class="dv">1</span>), Origin, Dest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1813,14 +1815,14 @@
 <li>Add <code>import load</code> at the top of the file to import your new file</li>
 <li>Call your new function like this</li>
 </ul>
-<div id="d25dc337" class="cell" data-execution_count="21">
+<div id="ac780d22" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>data <span class="op">=</span> load.load_data(<span class="st">"data/air_sample.csv"</span>, <span class="st">"data/L_CITY_MARKET_ID.csv"</span>, <span class="st">"data/L_CARRIERS.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="the-finished-function" class="slide level2">
 <h2>The finished function</h2>
 <p>Yours might not look exactly the same, and that’s okay</p>
-<div id="e00b0fd9" class="cell" data-execution_count="22">
+<div id="653059c6" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb28-2"><a href="#cb28-2"></a></span>
 <span id="cb28-3"><a href="#cb28-3"></a><span class="kw">def</span> load_data(main_file, market_file, carrier_file):</span>
@@ -2001,7 +2003,7 @@
 </section>
 <section id="making-functions-from-other-files-available-1" class="slide level2">
 <h2>Making functions from other files available</h2>
-<div id="eac2386f" class="cell" data-execution_count="23">
+<div id="955d557a" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="im">from</span> .load <span class="im">import</span> load_data</span>
 <span id="cb30-2"><a href="#cb30-2"></a><span class="im">from</span> .analysis <span class="im">import</span> <span class="op">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -2028,7 +2030,7 @@
 </section>
 <section id="try-it-again-2" class="slide level2">
 <h2>Try it again</h2>
-<div id="a756770a" class="cell" data-execution_count="24">
+<div id="eab692fc" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>airlinestats.busiest_routes(data, <span class="st">"Origin"</span>, <span class="st">"Dest"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
@@ -2191,7 +2193,7 @@ version = "0.0.1"</code></pre>
 </section>
 <section id="write-the-tests" class="slide level2">
 <h2>Write the tests</h2>
-<div id="aa9f6227" class="cell" data-execution_count="25">
+<div id="7965eaf9" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a><span class="im">import</span> unittest</span>
 <span id="cb33-2"><a href="#cb33-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb33-3"><a href="#cb33-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -2285,7 +2287,7 @@ JFK,SFO,2,2586</code></pre>
 </section>
 <section id="writing-the-test-1" class="slide level2">
 <h2>Writing the test</h2>
-<div id="cca6098d" class="cell" data-execution_count="26">
+<div id="e815051f" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a><span class="im">import</span> unittest</span>
 <span id="cb36-2"><a href="#cb36-2"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb36-3"><a href="#cb36-3"></a><span class="im">import</span> os.path</span>
@@ -2396,8 +2398,183 @@ JFK,SFO,2,2586</code></pre>
 <li>This way, I can document what packages I’m using, and restore them later</li>
 </ul>
 </section>
-<section id="what-is" class="slide level2">
-<h2>What is</h2>
+<section id="what-is-an-environment.yml" class="slide level2">
+<h2>What is an <code>environment.yml</code></h2>
+<ul>
+<li>The <code>environment.yml</code> file specifies the packages and versions needed for your project</li>
+</ul>
+<div class="sourceCode" id="cb37"><pre class="sourceCode numberSource {yaml} number-lines code-with-copy"><code class="sourceCode"><span id="cb37-1"><a href="#cb37-1"></a>name: air-analysis</span>
+<span id="cb37-2"><a href="#cb37-2"></a>channels:</span>
+<span id="cb37-3"><a href="#cb37-3"></a>  - conda-forge</span>
+<span id="cb37-4"><a href="#cb37-4"></a>  - defaults</span>
+<span id="cb37-5"><a href="#cb37-5"></a>dependencies:</span>
+<span id="cb37-6"><a href="#cb37-6"></a>  - python=3.12.*</span>
+<span id="cb37-7"><a href="#cb37-7"></a>  - pandas&gt;2.1,&lt;3.0.0</span>
+<span id="cb37-8"><a href="#cb37-8"></a>  - ipython&gt;8.17,&lt;9.0.0</span>
+<span id="cb37-9"><a href="#cb37-9"></a>  - ipykernel&gt;6.26,&lt;7.0.0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="creating-environment.yml" class="slide level2">
+<h2>Creating <code>environment.yml</code></h2>
+<ul>
+<li>You can automatically generate an <code>environment.yml</code>, but I prefer to create one manually</li>
+<li>An autogenerated <code>environment.yml</code> file will pin <em>every</em> package to a specific version, and prevent upgrades
+<ul>
+<li>It may also not work when changing operating systems or CPU types</li>
+<li>Autogenerated files are useful for reproducibility; it’s good practice to archive them when you finish your analysis so you can get back to exactly the package versions you had before</li>
+</ul></li>
+<li>I create my <code>environment.yml</code> with just the packages I’m actually using, and let <code>conda</code> figure out what other packages are needed to make them work</li>
+</ul>
+</section>
+<section id="creating-environment.yml-1" class="slide level2">
+<h2>Creating <code>environment.yml</code></h2>
+<ul>
+<li>Create an <code>environment.yml</code> file (using the “Text file” option in JupyterLab, or a text editor)</li>
+<li>The first line is the name of the environment</li>
+</ul>
+<div class="sourceCode" id="cb38"><pre class="sourceCode numberSource {yaml} number-lines code-with-copy"><code class="sourceCode"><span id="cb38-1"><a href="#cb38-1"></a>name: air-analysis</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="creating-environment.yml-2" class="slide level2">
+<h2>Creating <code>environment.yml</code></h2>
+<ul>
+<li>Next, we specify the <em>channels</em> we want to use</li>
+<li>A channel is just a set of Conda packages</li>
+<li>If you just want to use the packages that came with Anaconda, you can leave this blank</li>
+<li>But if you want to use <code>conda-forge</code> (a community-driven, open-source packaging effort), we need to specify that</li>
+</ul>
+<div class="sourceCode" id="cb39"><pre class="sourceCode numberSource {yaml} number-lines code-with-copy"><code class="sourceCode"><span id="cb39-1"><a href="#cb39-1"></a>channels:</span>
+<span id="cb39-2"><a href="#cb39-2"></a>    - conda-forge</span>
+<span id="cb39-3"><a href="#cb39-3"></a>    - defaults</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="creating-environment.yml-3" class="slide level2">
+<h2>Creating <code>environment.yml</code></h2>
+<ul>
+<li>The main part of the file specifies our dependencies</li>
+</ul>
+<div class="sourceCode" id="cb40"><pre class="sourceCode numberSource {yaml} number-lines code-with-copy"><code class="sourceCode"><span id="cb40-1"><a href="#cb40-1"></a>dependencies:</span>
+<span id="cb40-2"><a href="#cb40-2"></a>  - python=3.12.*</span>
+<span id="cb40-3"><a href="#cb40-3"></a>  - pandas~=2.1</span>
+<span id="cb40-4"><a href="#cb40-4"></a>  - ipython~=8.17</span>
+<span id="cb40-5"><a href="#cb40-5"></a>  - ipykernel~=6.26</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>We want any patch release of Python 3.12</li>
+<li>We want a pandas version compatible with 2.1, but not pandas 3 or greater (there is not currently a pandas 3)</li>
+<li>etc.</li>
+</ul>
+</section>
+<section id="semantic-versioning" class="slide level2">
+<h2>Semantic versioning</h2>
+<ul>
+<li>Many projects use <em>semantic versioning</em></li>
+<li>The version is <code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code></li>
+<li>e.g.&nbsp;pandas 2.1.2 is major release 2, minor release 1, patch release 2</li>
+<li>New patch releases can only fix bugs</li>
+<li>New minor releases can fix bugs or add backwards-compatible features</li>
+<li>New major releases can make breaking changes</li>
+<li>Versions 0.*, all bets are off
+<ul>
+<li>But usually, breaking changes will be new minor versions</li>
+</ul></li>
+</ul>
+</section>
+<section id="creating-an-environment-from-your-environment.yml" class="slide level2">
+<h2>Creating an environment from your <code>environment.yml</code></h2>
+<ul>
+<li><code>conda env create -n environment-name -f environment.yml</code></li>
+<li>Conda will “solve” the dependencies and install the requested packages</li>
+<li>If this is too slow, you can look into <a href="https://mamba.readthedocs.io/en/latest/">mamba</a></li>
+</ul>
+</section>
+<section id="activating-the-environment" class="slide level2">
+<h2>Activating the environment</h2>
+<ul>
+<li>When you activate an environment, running <code>python</code> etc. will refer to the packages installed in the environment</li>
+<li>Run <code>conda activate air-analysis</code></li>
+</ul>
+</section>
+<section id="using-jupyter-with-conda-environments" class="slide level2">
+<h2>Using Jupyter with Conda environments</h2>
+<ul>
+<li>There are two options for using JupyterLab with a conda environment
+<ul>
+<li>Install Jupyter inside your conda environment</li>
+<li>Install <code>ipykernel</code> in your environment and create a Jupyter “kernel” you can access from another environment</li>
+</ul></li>
+</ul>
+</section>
+<section id="using-jupyter-with-conda-environments-1" class="slide level2">
+<h2>Using Jupyter with Conda environments</h2>
+<ul>
+<li>Let’s install <code>jupyterlab</code> into our conda environment</li>
+<li>Edit your <code>environment.yml</code> to include a dependency <code>jupyterlab~=4.0</code></li>
+<li>Run <code>conda env update -f environment.yml -n air-analysis</code></li>
+<li>Now you should be able to run <code>jupyter lab</code> and start up jupyter in your conda environment
+<ul>
+<li>You may want to shut down any currently running jupyter sessions</li>
+</ul></li>
+<li>This will also update outdated packages in your environment</li>
+</ul>
+</section>
+<section id="exporting-a-conda-environment" class="slide level2">
+<h2>Exporting a conda environment</h2>
+<ul>
+<li>Sometimes, you want to export the <em>exact</em> set of packages you have installed, to ensure reproducibility or to move an environment to another machine</li>
+<li>To do this, run <code>conda env export -f environment-complete.yml</code></li>
+<li>This will generate an <code>environment.yml</code> with <em>every</em> package</li>
+<li>This will restrict any version upgrades, and may not work at all on other operating systems/CPU architectures</li>
+<li>But it will give you <em>exactly</em> the packages you had installed when you exported it</li>
+</ul>
+</section>
+<section id="documenting-your-code" class="slide level2">
+<h2>Documenting your code</h2>
+<ul>
+<li>Functions in Python can have <em>docstrings</em> that contain information about the function</li>
+<li>This is just a literal Python string that is the first line of the function definition</li>
+<li>Generally enclosed in triple-double-quotes (““” and “““) so that it can extend to multiple lines</li>
+<li>It’s a good practice to document every function, its arguments, assumptions it makes, etc.</li>
+</ul>
+</section>
+<section id="documenting-your-code-1" class="slide level2">
+<h2>Documenting your code</h2>
+<ul>
+<li>Let’s add a docstring to our <code>busiest_routes</code> function</li>
+<li>It’s typical to format your docstring onto multiple lines manually, rather than letting it wrap automatically</li>
+</ul>
+<div id="7a99b264" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a><span class="kw">def</span> busiest_routes(dataframe, origcol<span class="op">=</span><span class="st">"Origin"</span>, destcol<span class="op">=</span><span class="st">"Dest"</span>):</span>
+<span id="cb41-2"><a href="#cb41-2"></a>    <span class="co">"""</span></span>
+<span id="cb41-3"><a href="#cb41-3"></a><span class="co">    Calculate busiest routes from a dataframe of DB1B data. It expects disaggregate, ticket-level data with</span></span>
+<span id="cb41-4"><a href="#cb41-4"></a><span class="co">    a Passengers column indicating how many passengers were on each ticket.</span></span>
+<span id="cb41-5"><a href="#cb41-5"></a></span>
+<span id="cb41-6"><a href="#cb41-6"></a><span class="co">    Arguments:</span></span>
+<span id="cb41-7"><a href="#cb41-7"></a></span>
+<span id="cb41-8"><a href="#cb41-8"></a><span class="co">    - dataframe -- required, the data to use</span></span>
+<span id="cb41-9"><a href="#cb41-9"></a><span class="co">    - origcol -- optional, the column to use for representing the origin (default "Origin")</span></span>
+<span id="cb41-10"><a href="#cb41-10"></a><span class="co">    - destcol -- optional, the column to use for representing the destination (default "Dest")</span></span>
+<span id="cb41-11"><a href="#cb41-11"></a><span class="co">    """</span></span>
+<span id="cb41-12"><a href="#cb41-12"></a>    <span class="cf">assert</span> (dataframe.Passengers <span class="op">&gt;=</span> <span class="dv">1</span>).<span class="bu">all</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="why-not-just-write-comments" class="slide level2">
+<h2>Why not just write comments?</h2>
+<ul>
+<li>You definitely should write comments throughout your functions to explain what they’re doing</li>
+<li>But docstrings are special for two reasons
+<ul>
+<li><p>You can access a function’s docstring after it’s defined</p>
+<p>::: {#28a7b4ec .cell execution_count=28} <code>{.python .cell-code}   print(busiest_routes.__doc__)</code></p>
+<p>::: {.cell-output .cell-output-stdout} ```</p>
+<pre><code>  Calculate busiest routes from a dataframe of DB1B data. It expects disaggregate, ticket-level data with
+  a Passengers column indicating how many passengers were on each ticket.
+
+  Arguments:
+
+  - dataframe -- required, the data to use
+  - origcol -- optional, the column to use for representing the origin (default "Origin")
+  - destcol -- optional, the column to use for representing the destination (default "Dest")</code></pre>
+<p>``` ::: :::</p></li>
+<li><p>Documentation-generation software (e.g.&nbsp;MkDocs, Sphinx) can use the docstrings to generate function-level documentation</p></li>
+</ul></li>
+</ul>
 
 <img src="UNC_logo_RGB.png" class="slide-logo r-stretch"><div class="footer footer-default">
 <p>https://projects.indicatrix.org/odum-modular-design-python</p>
